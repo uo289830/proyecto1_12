@@ -7,7 +7,37 @@ class EntidadModel:
     
     def __init__(self):
         self.db = DataBase("deporte.db")
+    def comprobarNomEnt(self,nombre):
+        query="SELECT COUNT(*) from ActividadEntidades where nombre_entidad=?"
+        s=self.db.executeQuery(query,(nombre,))
+        s=s[0]['COUNT(*)']
+        print(s)
+        if s!=0:
+            return False
+        else:
+            return True
         
+    def comprobarNomActividad(self,nombre):
+        query="SELECT COUNT(*) from ActividadEntidades where nombre_activ_entidad=?"
+        s=self.db.executeQuery(query,(nombre,))
+        s=s[0]['COUNT(*)']
+        print(s)
+        if s!=0:
+            return False
+        else:
+            return True
+    
+    def comprobrarhora(sef,hora):
+        horas=int(hora[0:2])
+        mins=int(hora[3:])
+        if horas>23 or horas<0:
+            return False
+        elif mins>59 or mins<0:
+            return False
+        else:
+            return True       
+        
+    
       # Inserción de los datos de una actividad (historia de usuario1 - Adriana)
     def insertActividadEntidad(self,nombre_entidad, nombre_actividad, descripcion, fecha, duracion,hora_inicio, localizacion,plazas, coste,info_ad):
         while True:

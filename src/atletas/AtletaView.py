@@ -143,11 +143,9 @@ class AtletaView:
                 print("No existe usuario con este email")
         fecha_inicio=input("Fecha de inicio de la actividad (aaaa-mm-dd):")
         fecha_fin=input("Fecha de fin de la actividad (aaaa-mm-dd):")
-        peso=input("Peso en kg:")
-        altura=input("altura en cm:")
-        edad=input("Edad en años:")
+       
         sexo=input("mujer/hombre:")
-        self.atleta.calcularConsumo(correo_electronico,fecha_inicio,fecha_fin,peso,altura,edad,sexo)
+        self.atleta.calcularConsumo(correo_electronico,fecha_inicio,fecha_fin,sexo)
 
     #h1s2 sara    
     
@@ -377,12 +375,3 @@ class AtletaView:
             plt.ylabel('Valor del Objetivo')
             plt.title('Progreso en Objetivos')
             plt.show()       
-
-            
-    
-
-            
-
-
-            
-    

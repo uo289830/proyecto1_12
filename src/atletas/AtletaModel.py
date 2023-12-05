@@ -90,10 +90,23 @@ class AtletaModel:
         return self.db.executeQuery(query,(nameactividad,correo_electronico))
     
     ##Calcular el consumo calórico
+    def calcular_edad(self,fecha):
+        fecha_nacimiento = datetime.strptime(str(fecha), "%Y-%m-%d")
+        edad = relativedelta(datetime.now(), fecha_nacimiento)
+        años=edad.years 
+        return años
+    
     #obtener el met de la actividad
-    def obtenerMet (self,subtipo,peso, altura,edad,sexo):
+    def obtenerMet (self,subtipo,correo,sexo):
+        query="SELECT peso from Atletas where correo_electronico=?"
+        peso=self.db.executeQuery(query,(correo,))
         peso=float(peso)
+        query="SELECT Altura from Atletas where correo_electronico=?"
+        altura=self.db.executeQuery(query,(correo,))
         altura=float(altura)
+        query="SELECT fecha_nacimiento from Atletas where correo_electronico=?"
+        fecha_nacimiento=self.db.executeQuery(query,(correo,))
+        edad=self.calcular_edad(fecha_nacimiento)
         edad=float(edad)
         sexo=str(sexo)
         subtipo=str(subtipo)
@@ -110,7 +123,7 @@ class AtletaModel:
         
         
     
-    def calcularConsumo(self,correoelectronico,inicio,fin,peso,altura,edad,sexo):
+    def calcularConsumo(self,correoelectronico,inicio,fin,sexo):
         #obtenemos las actividades en esa fecha
         actividades=AtletaModel.busca_actividades(self,correoelectronico,inicio,fin)
         listaconsumos=[]
@@ -119,7 +132,7 @@ class AtletaModel:
         for actividad in actividades:
             subtipo= actividad['nombre_subtipo']
             print(subtipo)
-            consumo= AtletaModel.obtenerMet(self,subtipo,peso,altura,edad,sexo) # type: ignore
+            consumo= AtletaModel.obtenerMet(self,subtipo,correoelectronico,sexo) # type: ignore
             listaconsumos.append(consumo)
             if consumo<min:
                 min=consumo
@@ -361,9 +374,34 @@ class AtletaModel:
             return False
         else:
             return True
-            
         
-    
+    def comprobarMetPago(self,correo):
+        query="SELECT IBAN, Numero_tarjeta, fecha_caducidad,CVV from Atletas where correo_electronico=?"
+        s=self.db.executeQuery(query,(correo,))
+        for clave in s[0]:
+            valor=s[0][clave]
+            print(clave)
+            print(valor)
+            if valor==None:
+                return False
+            else:
+                return True
+            
+    def generar_justificante(self,idactividad,correo):
+        query="SELECT nombre from Atletas where correo_electronico=?"
+        nombre=self.db.executeQuery(query,(correo,))
+        query="SELECT nombre_entidad, nombre_activ_entidad ,fecha ,hora_inicio,lugar,info_adicional from ActividadEntidades where idactividadentidad=? " 
+        info_ent=self.db.executeQuery(query,(idactividad,))
+        nombre=nombre[0]['nombre']
+        nombre_entidad=info_ent[0]['nombre_entidad']
+        nombre_activ=info_ent[0]['nombre_activ_entidad']
+        fecha=info_ent[0]['fecha']
+        hora=info_ent[0]['hora_inicio']
+        lugar=info_ent[0]['lugar']
+        info=info_ent[0]['info_adicional']
+        with open('Justificante.txt', 'w') as file: 
+            file.write(f"Estimado {nombre},\nDesde {nombre_entidad} te confirmamos tu incripcion a la actividad {nombre_activ}.\n  FECHA: {fecha},\n  HORA:  {hora},\n  LUGAR: {lugar}, \n{info}")            
+
     def registrar_inscripcion(self,correo_electronico,actividad_externa):
         nombre_actividad=actividad_externa['nombre_activ_entidad']
         nombre_actividad=str(nombre_actividad)
@@ -377,13 +415,21 @@ class AtletaModel:
         if s==True:
             a=self.comprobarNumPlazas(idactividad)
             if a==True:
-                query = """
-
-            INSERT INTO Inscripciones(correo_electronico, idactividadentidad)
-            VALUES (?, ?)
-            """
-                self.db.executeQuery(query, (correo_electronico, idactividad))
-                print("se ha registrado la inscripcion")
+                l=self.obtenerTipoAtleta(correo_electronico)
+                if l=="Free":
+                    n=self.comprobarMetPago(correo_electronico)
+                    if n==False:
+                        print("MÉTODO DE PAGO NO VÁLIDO, ACTUALICE SU MÉTODO DE PAGO")
+                    else:
+                        query = """INSERT INTO Inscripciones(correo_electronico, idactividadentidad)VALUES (?, ?)"""
+                        self.db.executeQuery(query, (correo_electronico, idactividad))
+                        print("se ha registrado la inscripcion")
+                        self.generar_justificante(idactividad,correo_electronico)
+                else:
+                    query = """INSERT INTO Inscripciones(correo_electronico, idactividadentidad)VALUES (?, ?)"""
+                    self.db.executeQuery(query, (correo_electronico, idactividad))
+                    print("se ha registrado la inscripcion")
+                    self.generar_justificante(idactividad,correo_electronico)
             else:
                 print("NO QUEDAN PLAZAS DISPONIBLES")
         else:
