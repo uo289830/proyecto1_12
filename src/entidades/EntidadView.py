@@ -6,14 +6,16 @@ class EntidadView:
     def __init__(self):
         self.actividad_ent=EntidadModel()
         self.choices= { "1": self.nuevaActividadEntidad,
-                         "2": self.quit
+                        "2":self.verInscripcionesActividad,
+                        "3": self.quit
                        }
         
            
     def displayMenu (self):
         print(""" Opciones: \n
               1.- Introducir una nueva actividad \n
-              2.- Salir 
+              2.- Ver inscripciones por actividad
+              3.- Salir 
               """)
         
     #Muestra la lista de opciones y permite la selección
@@ -62,6 +64,31 @@ class EntidadView:
         
         self.actividad_ent.insertActividadEntidad(nombre_entidad,nombreActividad,descripcion, fecha, duracion,hora, localizacion,plazas,coste,info)
         print("Actividad insertada")
+
+    
+
+    def verInscripcionesActividad(self):
+        nombre_entidad = input("Ingrese el nombre de la entidad: ")
+        actividades_entidad = self.actividad_ent.obtener_actividades_entidad(nombre_entidad)
+        
+        if actividades_entidad:
+            print("Lista de Actividades:")
+            for actividad in actividades_entidad:
+                print(f"ID: {actividad['idactividadentidad']}, Nombre: {actividad['nombre_activ_entidad']}")
+
+            id_seleccionado = int(input("Seleccione el ID de la actividad: "))
+            
+            resultados_inscripciones = self.actividad_ent.obtener_inscripciones(id_seleccionado)
+
+            if resultados_inscripciones:
+                print("Lista de Inscripciones:")
+                for inscripcion in resultados_inscripciones:
+                    print(f"Actividad: {inscripcion['nombre_actividad']}, Correo Electrónico: {inscripcion['correo_electronico']}, Tipo de Atleta: {inscripcion['tipo_atleta']}")
+            else:
+                print("No hay inscripciones disponibles para esta actividad.")
+        else:
+            print("No hay actividades disponibles para esta entidad.")    
+    
     
     def quit(self):
         print("Cerrando opciones.")

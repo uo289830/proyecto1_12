@@ -51,3 +51,23 @@ class EntidadModel:
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)
                 """
         self.db.executeUpdateQuery(query,nombre_entidad, nombre_actividad, descripcion, fecha, duracion,hora_inicio, localizacion,plazas, coste,info_ad)
+
+
+    def obtener_inscripciones(self, id_actividad):
+        query = """
+            SELECT ae.nombre_activ_entidad AS nombre_actividad, A.correo_electronico, A.tipo_atleta
+            FROM Inscripciones i
+            INNER JOIN ActividadEntidades ae ON i.idactividadentidad = ae.idactividadentidad
+            INNER JOIN Atletas A ON i.correo_electronico = A.correo_electronico
+            WHERE ae.idactividadentidad = ?
+        """
+
+        return self.db.executeQuery(query, (id_actividad,))
+    
+    def obtener_actividades_entidad(self, nombre_entidad):
+        query = """
+            SELECT idactividadentidad, nombre_activ_entidad
+            FROM ActividadEntidades
+            WHERE nombre_entidad = ?
+        """
+        return self.db.executeQuery(query, (nombre_entidad,))

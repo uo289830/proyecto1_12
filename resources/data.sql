@@ -76,6 +76,7 @@ insert into Actividades (nombre_actividad,nombre_subtipo,fecha,localizacion,dura
 insert into Actividades (nombre_actividad,nombre_subtipo,fecha,localizacion,duracion,distancia,FCmax,FCmin,correo_electronico) values('relajacion', 'yoga', '2023-03-17', 'estudio de yoga', 90, 0, 110, 55, 'samuel@gmail.com');
 --Tabla ActividadEntidades
 insert into ActividadEntidades (nombre_entidad, nombre_activ_entidad ,descripcion ,fecha ,duracion_dias,hora_inicio,lugar,plazas,coste_UsFree,info_adicional) values ('Runners SA','Maraton SA','Recorrido 30km por el centro de la ciudad','2023-12-31',1,'09:00','Valencia',1000,4.99,'Cualquier cambio sera notificado atraves de este medio');
+insert into ActividadEntidades (nombre_entidad, nombre_activ_entidad ,descripcion ,fecha ,duracion_dias,hora_inicio,lugar,plazas,coste_UsFree,info_adicional) values ('Runners SA','Maraton Madrid SA','Recorrido 42km por el centro de la ciudad','2023-11-31',1,'10:00','Madrid',1000,5.99,'Cualquier cambio sera notificado atraves de este medio');
 insert into ActividadEntidades (nombre_entidad, nombre_activ_entidad ,descripcion ,fecha ,duracion_dias,hora_inicio,lugar,plazas,coste_UsFree,info_adicional) values ('xx','xx','xx','2023-12-12',1,'00:00','xx',1,0,'xx');
 
 --Tabla Inscripciones
