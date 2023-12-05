@@ -200,41 +200,58 @@ class AtletaView:
         Nombre = input("Introduzca su nombre:")
         Apellidos = input("Introduzca sus apellidos:")
         fecha_nacimiento = input("Fecha de nacimiento (aaa-mm-dd):")
-        peso = input("Peso (en kg):")
-        Altura = input("Altura (en cm):")
+        peso:int=int(input("Peso (en kg):"))
+        while peso<=0:
+            print("El peso es inválido")
+            peso:int=int(input("Vuelva a introducir el peso(en kg):"))
+        Altura:int=int(input("Altura (en cm):"))
+        while Altura<=30:
+            print("La altura es improbable")
+            Altura:int=int(input("Vuelva a introducir la altura:"))
+        sexo=input("Sexo (Masculino/Femenino):")
         tipo_atleta="Free"
         fecha_alta=datetime.now().date()
         Iban=None
         Numero_tarjeta=None
         fecha_caducidad=None
         Cvv=None        
-        self.atleta.insertAtletaFree(Correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv)
+        self.atleta.insertAtletaFree(Correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv,sexo)
     
     #Vista para la HU2 registrar un usuario Premium
     def nuevaAtletaPremium(self):
-        Correo_electronico = input("Introduzca su corrreo electrónico:")
+        correo_electronico = input("Introduzca su corrreo electrónico:")
         Nombre = input("Introduzca su nombre:")
         Apellidos = input("Introduzca sus apellidos:")
         fecha_nacimiento = input("Fecha de nacimiento (aaa-mm-dd):")
-        peso = input("Peso (en kg):")
-        Altura = input("Altura (en cm):")
+        peso:int=int(input("Peso (en kg):"))
+        while peso<=0:
+            print("El peso es inválido")
+            peso:int=int(input("Vuelva a introducir el peso(en kg):"))
+        Altura:int=int(input("Altura (en cm):"))
+        while Altura<=30:
+            print("La altura es improbable")
+            Altura:int=int(input("Vuelva a introducir la altura:"))
+        sexo=input("Sexo (Masculino/Femenino):")
         tipo_atleta="Premium"
         fecha_alta=datetime.now().date()
         metodo_pago=input("Introduzca el método de pago (Transferencia/tarjeta):")
+        while metodo_pago.upper() != "TRANSFERENCIA" and metodo_pago.upper() != "TARJETA":
+            print("El método de pago no es correcto")
+            metodo_pago = input("Vuelva a introducir el método de pago (Transferencia/tarjeta):")
         if metodo_pago.upper()=="TRANSFERENCIA":
             Iban=input("Introduzca su IBAN de la cuenta:")
             Numero_tarjeta=None
             fecha_caducidad=None
             Cvv=None
+            self.atleta.insertAtletaPremium(correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv,sexo)
+            print(f"Los datos han sido introducidos correctamente!",{Nombre},{Apellidos},{Altura},{Iban})
         elif metodo_pago.upper()=="TARJETA":
             Numero_tarjeta=input("Introduzca su numero de tarjeta:")
             fecha_caducidad=input("Introduzca la fecha de caducidad de la tarjeta (mm-dd):")
             Cvv=input("Introduzca su CVV de la tarjeta:")
-            Iban=None  
-        else:
-            print("El método de pago no es correcto")
-            metodo_pago=input("Vuelva a introducir el método de pago (Transferencia/tarjeta):")
-        self.atleta.insertAtletaPremium(Correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv)
+            Iban=None
+            self.atleta.insertAtletaPremium(correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv,sexo)
+            print(f"Los datos han sido introducidos correctamente!",{Nombre},{Apellidos},{Altura},{Numero_tarjeta})
 
     def introducir_Objetivos(self):
         correo_electronico=input("Introduzca su correo electrónico:")
