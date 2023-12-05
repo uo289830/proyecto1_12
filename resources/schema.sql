@@ -7,7 +7,7 @@ drop table if exists Inscripciones;
 
 create table Atletas (correo_electronico varchar(100) unique not null primary key, nombre varchar(32), apellidos varchar(32),fecha_alta varchar(10),
                             fecha_nacimiento varchar(10),peso varchar(10),Altura varchar(10), tipo_atleta varchar(32),IBAN varchar(64),
-                            Numero_tarjeta varchar (32),fecha_caducidad varchar(10),CVV varchar(10));
+                            Numero_tarjeta varchar (32),fecha_caducidad varchar(10),CVV varchar(10), sexo varchar(32));
 create table Actividades (idactividad INTEGER primary key,nombre_actividad varchar(32) not null, nombre_subtipo varchar(100) not null,  fecha varchar(10),
                        duracion float, localizacion varchar(32), distancia float , FCmax int, FCmin int,
                        correo_electronico varchar(100) not null,

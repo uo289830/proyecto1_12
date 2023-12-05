@@ -31,7 +31,8 @@ class AtletaView:
                          "12":self.cambiartipo,
                          "13":self.generar_graficos_atleta,
                          "14":self.listaActividadesInscritos,
-                         "15": self.quit
+                         "15":self.compararConOtros,
+                         "16": self.quit
                        }
         
     def displayMenu (self):
@@ -50,7 +51,8 @@ class AtletaView:
               12.- Cambiar de free a premium o viceversa
               13.- Generar gráficos
               14.- Ver actividades inscrito
-              15.- Salir 
+              15.- Comparación con otros atletas
+              16.- Salir 
               """)
  
     #Muestra la lista de opciones y permite la selección
@@ -389,4 +391,37 @@ class AtletaView:
             for actividad in resultados:
                 print(f"Nombre: {actividad['nombre_actividad']}, Fecha: {actividad['fecha']},Hora de inicio: {actividad['hora_inicio']}, Lugar: {actividad['lugar']}")
         else:
-            print("No hay actividades disponibles para este deportista")       
+            print("No hay actividades disponibles para este deportista")      
+
+    def compararConOtros(self):
+        correo_electronico = input("Introduzca su corrreo electrónico:")
+        while correo_electronico in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("EL correo ya está registrado")
+            correo_electronico=input("Vuelva a introducir su correo electrónico:")
+        # Verificar si el usuario es Premium
+        if self.atleta.obtenerTipoAtleta(correo_electronico) != 'Premium':
+            print("Esta funcionalidad está disponible solo para usuarios Premium.")
+            return
+        fecha_maxima=input("Introduzca la fecha de nacimiento máxima para comparar:")
+        fecha_minima=input("Introduzca la fecha de nacimiento minima para comparar:")              
+        atletas_en_rango = self.atleta.atletasEnRango(fecha_maxima, fecha_minima)
+
+        # Mostrar información de comparación
+        print(f"\nComparación de actividades y consumo calórico para el rango de edad {fecha_minima} {fecha_maxima}:\n")
+
+        for atleta in atletas_en_rango:
+            correo_atleta = atleta['correo_electronico']
+
+            # Obtener estadísticas de actividades y consumo calórico
+            datosAtleta=self.atleta.obtenerDatosAtleta(correo_atleta)
+            if datosAtleta:
+                sexo_atleta = datosAtleta.get('sexo')
+            num_actividades = self.atleta.getnumactividades((correo_atleta, fecha_maxima, fecha_minima))
+            consumo_medio = self.atleta.calcularConsumo(correo_atleta, fecha_maxima, fecha_minima,sexo_atleta )
+
+            # Mostrar información del atleta
+            print(f"Atleta: {atleta['nombre']} {atleta['apellidos']} ({correo_atleta})")
+            print(f"Número de actividades: {num_actividades}")
+            print(f"Consumo calórico medio: {consumo_medio:.2f} kcal/h")
+            print()
+     

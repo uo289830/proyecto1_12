@@ -141,6 +141,7 @@ class AtletaModel:
             print(f"Para la actividad {actividad['nombre_actividad']} el dia {actividad['fecha']} se obtuvo un consumo de {consumo}")
         consumototal= sum(listaconsumos)
         print(f"Consumo total: {consumototal}, Consumo minimo: {min}, Consumo maximo: {max}")
+        return consumototal
         
              
     #h1s2 sara
@@ -506,5 +507,35 @@ class AtletaModel:
             ae.lugar FROM ActividadEntidades ae INNER JOIN Inscripciones i ON 
             ae.idactividadentidad=i.idactividadentidad WHERE correo_electronico=?"""
         return self.db.executeQuery(query,(correo_electronico,))
+    
+    def atletasEnRango(self,fecha_nacimiento_maxima, fecha_nacimiento_minima):
+        query = """
+            SELECT correo_electronico, nombre, apellidos, fecha_nacimiento
+            FROM Atletas
+            WHERE fecha_nacimiento BETWEEN ? AND ?
+        """
+        atletas_en_rango = self.db.executeQuery(query, (fecha_nacimiento_maxima, fecha_nacimiento_minima))
+        return atletas_en_rango 
+
+    def obtenerFechaNacimientoAtleta(self, correo_electronico):
+        query = "SELECT fecha_nacimiento FROM Atletas WHERE correo_electronico = ?"
+        result = self.db.executeQuery(query, (correo_electronico,))
+        return result
+
+    def calcularEdadEnFecha(self, fecha_nacimiento, fecha_referencia):
+        # Calcular la diferencia de años entre dos fechas
+        diferencia_fechas = relativedelta(fecha_referencia, fecha_nacimiento)
+        return diferencia_fechas.years
+
+    def obtenerDatosAtleta(self, correo_electronico):
+        query = "SELECT sexo FROM Atletas WHERE correo_electronico = ?"
+        result = self.db.executeQuery(query, (correo_electronico,))
+
+        if result:
+            return {
+                'sexo': result[0].get('sexo')
+            }
+        else:
+            return None  
     
 

@@ -2,21 +2,18 @@
 
 --Tabla Atletas
 -- Insertar usuarios "Free"
-insert into Atletas(correo_electronico, nombre, apellidos, fecha_alta, tipo_atleta)
-values ('Juan@gmail.com', 'Juan', 'Martinez', '2023-01-29', 'Free');
+INSERT INTO Atletas(correo_electronico, nombre, apellidos, fecha_alta, fecha_nacimiento, peso, altura, tipo_atleta, sexo)
+VALUES ('Juan@gmail.com', 'Juan', 'Martinez', '2023-01-29', '1990-05-15', '70', '175', 'Free', 'Masculino');
+
 
 -- Insertar usuarios "Premium" con valores para los campos adicionales
-insert into Atletas(correo_electronico, nombre, apellidos, fecha_alta, tipo_atleta, IBAN, Numero_tarjeta, fecha_caducidad, CVV)
-values ('Javier@gmail.com', 'Javier', 'Fernandez', '2023-01-29', 'Premium', 'ES12345678901234567890', '1234 5678 9012 3456', '01/25', '123');
+INSERT INTO Atletas(correo_electronico, nombre, apellidos, fecha_alta, fecha_nacimiento, peso, altura, tipo_atleta, IBAN, Numero_tarjeta, fecha_caducidad, CVV, sexo)
+VALUES 
+  ('Javier@gmail.com', 'Javier', 'Fernandez', '2023-01-29', '1985-12-10', '75', '180', 'Premium', 'ES12345678901234567890', '1234 5678 9012 3456', '01/25', '123', 'Masculino'),
+  ('Marta@gmail.com', 'Marta', 'Puente', '2023-01-29', '1988-07-22', '65', '165', 'Premium', 'ES23456789012345678901', '2345 6789 0123 4567', '02/26', '456', 'Femenino'),
+  ('Samuel@gmail.com', 'Samuel', 'Valle', '2023-01-29', '1992-03-05', '80', '185', 'Premium', 'ES34567890123456789012', '3456 7890 1234 5678', '03/23', '789', 'Masculino'),
+  ('Sofia@gmail.com', 'Sofia', 'Rodriguez', '2023-01-29', '1995-09-18', '60', '170', 'Premium', 'ES45678901234567890123', '4567 8901 2345 6789', '04/24', '012', 'Femenino');
 
-insert into Atletas(correo_electronico, nombre, apellidos, fecha_alta, tipo_atleta, IBAN, Numero_tarjeta, fecha_caducidad, CVV)
-values ('Marta@gmail.com', 'Marta', 'Puente', '2023-01-29', 'Premium', 'ES23456789012345678901', '2345 6789 0123 4567', '02/26', '456');
-
-insert into Atletas(correo_electronico, nombre, apellidos, fecha_alta, tipo_atleta, IBAN, Numero_tarjeta, fecha_caducidad, CVV)
-values ('Samuel@gmail.com', 'Samuel', 'Valle', '2023-01-29', 'Premium', 'ES34567890123456789012', '3456 7890 1234 5678', '03/23', '789');
-
-insert into Atletas(correo_electronico, nombre, apellidos, fecha_alta, tipo_atleta, IBAN, Numero_tarjeta, fecha_caducidad, CVV)
-values ('Sofia@gmail.com', 'Sofia', 'Rodriguez', '2023-01-29', 'Premium', 'ES45678901234567890123', '4567 8901 2345 6789', '04/24', '012');
 
 --Tabla Subtipos
 insert into Subtipos(nombre_subtipo, met) values ('bicicleta montania', 8.5);
