@@ -129,15 +129,7 @@ class AtletaModel:
         consumototal= sum(listaconsumos)
         print(f"Consumo total: {consumototal}, Consumo minimo: {min}, Consumo maximo: {max}")
         
-        
-
-        
-    
-    
-   
-
-
-        
+             
     #h1s2 sara
     
     def obtenerActividadesDelMes(self, correo_electronico):
