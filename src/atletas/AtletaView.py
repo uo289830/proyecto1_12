@@ -30,7 +30,8 @@ class AtletaView:
                          "11":self.inscripcion_actividad,
                          "12":self.cambiartipo,
                          "13":self.generar_graficos_atleta,
-                         "14": self.quit
+                         "14":self.listaActividadesInscritos,
+                         "15": self.quit
                        }
         
     def displayMenu (self):
@@ -48,7 +49,8 @@ class AtletaView:
               11.- Inscripción a actividad externa
               12.- Cambiar de free a premium o viceversa
               13.- Generar gráficos
-              14.- Salir 
+              14.- Ver actividades inscrito
+              15.- Salir 
               """)
  
     #Muestra la lista de opciones y permite la selección
@@ -374,4 +376,17 @@ class AtletaView:
             plt.xlabel('Fecha')
             plt.ylabel('Valor del Objetivo')
             plt.title('Progreso en Objetivos')
-            plt.show()       
+            plt.show()
+
+    def listaActividadesInscritos(self):
+        correo_electronico = input("Introduzca su corrreo electrónico:")
+        while correo_electronico in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("EL correo ya está registrado")
+            correo_electronico=input("Vuelva a introducir su correo electrónico:")
+        resultados=self.atleta.obtenerdatosInscripción(correo_electronico)
+        if resultados:
+            print("Lista de Actividades:")
+            for actividad in resultados:
+                print(f"Nombre: {actividad['nombre_actividad']}, Fecha: {actividad['fecha']},Hora de inicio: {actividad['hora_inicio']}, Lugar: {actividad['lugar']}")
+        else:
+            print("No hay actividades disponibles para este deportista")       

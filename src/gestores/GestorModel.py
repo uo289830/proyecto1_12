@@ -39,3 +39,12 @@ class GestorModel:
             ORDER BY total_actividades DESC
         """
         return self.db.executeQuery(query, (tipo_actividad,))
+    
+    def obtener_num_deportistas_inscritos(self):
+        query = """
+            SELECT ae.nombre_entidad, ae.nombre_activ_entidad, COUNT(i.idinscripcion) AS num_inscritos
+            FROM ActividadEntidades ae
+            LEFT JOIN Inscripciones i ON ae.idactividadentidad = i.idactividadentidad
+            GROUP BY ae.nombre_entidad, ae.nombre_activ_entidad
+        """
+        return self.db.executeQuery(query)

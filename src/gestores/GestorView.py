@@ -6,18 +6,19 @@ class GestorView:
     
     def __init__(self):
         self.gestor = GestorModel()
-        self.actividad=ActividadModel()
         self.choices = { 
             "1": self.mostrarEstadoForma,
             "2": self.mostrarDeportistasMasActivos,
-            "3": self.quit
+            "3": self.inscripciones,
+            "4": self.quit
         }
         
     def displayMenu(self):
         print(""" Opciones: \n
               1.- Mostrar el estado de forma \n
               2.- Obtener deportistas más activos por tipo de actividad
-              3.- Salir 
+              3.- Mostrar inscripciones
+              4.- Salir 
               """)
         
     def run(self):
@@ -55,6 +56,15 @@ class GestorView:
                 print("Nombre de usuario: {}, Fecha de Alta: {}, Total de Actividades: {}".format(atleta['nombre_atleta'], atleta['fecha_alta'], atleta['total_actividades']))
         else:
             print("No se encontraron atletas activos para el tipo de actividad '{}'".format(tipo_actividad))
+    
+
+    def inscripciones(self):
+        res = self.gestor.obtener_num_deportistas_inscritos()
+        for inscripcion in res:
+            print(f"Nombre de la Entidad: {inscripcion ['nombre_entidad']}, Nombre de la Actividad: {inscripcion ['nombre_activ_entidad']}, "
+                f"Número inscritos: {inscripcion ['num_inscritos']}")
+
+
 
     def quit(self):
         print("Cerrando opciones.")
