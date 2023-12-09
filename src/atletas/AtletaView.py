@@ -6,6 +6,7 @@ from actividades.ActividadModel import ActividadModel
 from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import pandas as pd
+from tabulate import tabulate
 
 class AtletaView:
     '''
@@ -405,10 +406,11 @@ class AtletaView:
         resultados=self.atleta.obtenerdatosInscripción(correo_electronico)
         if resultados:
             print("Lista de Actividades:")
-            for actividad in resultados:
-                print(f"Nombre: {actividad['nombre_actividad']}, Fecha: {actividad['fecha']},Hora de inicio: {actividad['hora_inicio']}, Lugar: {actividad['lugar']}")
+            headers = ["Nombre", "Fecha", "Hora", "Lugar"]
+            table_data = [[actividad['nombre_actividad'], actividad['fecha'], actividad['hora_inicio'], actividad['lugar']] for actividad in resultados]
+            print(tabulate(table_data, headers=headers, tablefmt="grid"))
         else:
-            print("No hay actividades disponibles para este deportista")      
+            print("No hay actividades disponibles para este atleta.")
 
     def compararConOtros(self):
         correo_electronico = input("Introduzca su corrreo electrónico:")
