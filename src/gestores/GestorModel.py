@@ -31,12 +31,11 @@ class GestorModel:
 
     def obtenerDeportistasMasActivos(self, tipo_actividad):
         query = """
-            SELECT A.correo_electronico AS correo_atleta, COUNT(Ac.idactividad) AS total_actividades
-            FROM Atletas AS A
-            INNER JOIN Actividades AS Ac ON A.correo_electronico = Ac.correo_electronico
-            WHERE Ac.nombre_actividad = ?
-            GROUP BY A.correo_electronico
-            ORDER BY total_actividades DESC
+            SELECT A.correo_electronico AS correo_atleta, A.nombre AS nombre_atleta, A.fecha_alta,
+            COUNT(Ac.idactividad) AS total_actividades FROM Atletas AS A
+            INNER JOIN Actividades AS Ac ON A.correo_electronico = Ac.correo_electronico 
+            WHERE Ac.nombre_actividad = ? GROUP BY A.correo_electronico, A.nombre, A.fecha_alta ORDER BY
+            total_actividades DESC
         """
         return self.db.executeQuery(query, (tipo_actividad,))
     

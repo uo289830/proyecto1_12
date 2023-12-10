@@ -52,10 +52,18 @@ class GestorView:
     def mostrarDeportistasMasActivos(self):
         tipo_actividad = input("Introduce el tipo de actividad: ")
         atletas_activos = self.gestor.obtenerDeportistasMasActivos(tipo_actividad)
+        
         if atletas_activos:
             print("Atletas más activos en el tipo de actividad '{}':".format(tipo_actividad))
-            for atleta in atletas_activos:
-                print("Nombre de usuario: {}, Fecha de Alta: {}, Total de Actividades: {}".format(atleta['nombre_atleta'], atleta['fecha_alta'], atleta['total_actividades']))
+            # Crear una lista de listas para usar en tabulate
+            tabla_atletas = [
+                [atleta['nombre_atleta'], atleta['fecha_alta'], atleta['total_actividades']] 
+                for atleta in atletas_activos
+            ]
+            # Encabezados de la tabla
+            headers = ["Nombre de usuario", "Fecha de Alta", "Total de Actividades"]
+            # Imprimir la tabla
+            print(tabulate(tabla_atletas, headers=headers, tablefmt="grid"))
         else:
             print("No se encontraron atletas activos para el tipo de actividad '{}'".format(tipo_actividad))
     

@@ -88,14 +88,32 @@ class AtletaView:
 
     def muestra_actividades(self):
         # Recupera y muestra los detalles de las actividades en el rango de fechas.
-        correo_electronico=input("Correo electrónico:")
-        fecha_inicio=input("Fecha de inicio de la actividad (aaaa-mm-dd):")
-        fecha_fin=input("Fecha de fin de la actividad (aaaa-mm-dd):")
-        actividades=self.atleta.busca_actividades(correo_electronico,fecha_inicio,fecha_fin)
-        for actividad in actividades:
-            print(f"ID de la actividad: {actividad['idactividad']}, Fecha: {actividad['fecha']}, Duración: {actividad['duracion']}, Distancia: {actividad['distancia']}, FCmax: {actividad['FCmax']}, FCmin: {actividad['FCmin']}, Nombre de la categoria: {actividad['nombre_actividad']}, Nombre de la actividad:{actividad['nombre_subtipo']}")
-    
+        correo_electronico = input("Correo electrónico:")
+        fecha_inicio = input("Fecha de inicio de la actividad (aaaa-mm-dd):")
+        fecha_fin = input("Fecha de fin de la actividad (aaaa-mm-dd):")
         
+        actividades = self.atleta.busca_actividades(correo_electronico, fecha_inicio, fecha_fin)
+
+        # Convertir la lista de actividades a una lista de listas para tabulate
+        actividades_tabla = []
+        for actividad in actividades:
+            actividades_tabla.append([
+                actividad['idactividad'],
+                actividad['fecha'],
+                actividad['duracion'],
+                actividad['distancia'],
+                actividad['FCmax'],
+                actividad['FCmin'],
+                actividad['nombre_actividad'],
+                actividad['nombre_subtipo']
+            ])
+
+        # Encabezados de la tabla
+        headers = ["ID de la actividad", "Fecha", "Duración", "Distancia", "FCmax", "FCmin", "Nombre de la categoría", "Nombre de la actividad"]
+
+        # Imprimir la tabla
+        print(tabulate(actividades_tabla, headers=headers, tablefmt="grid"))
+            
 
 
     def mostrar_resumen_atleta(self):
@@ -209,50 +227,59 @@ class AtletaView:
         while Altura<=30:
             print("La altura es improbable")
             Altura:int=int(input("Vuelva a introducir la altura:"))
-        sexo=input("Sexo (Masculino/Femenino):")
         tipo_atleta="Free"
         fecha_alta=datetime.now().date()
         Iban=None
         Numero_tarjeta=None
         fecha_caducidad=None
         Cvv=None        
-        self.atleta.insertAtletaFree(Correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv,sexo)
+        self.atleta.insertAtletaFree(Correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv)
     
     #Vista para la HU2 registrar un usuario Premium
     def nuevaAtletaPremium(self):
-        correo_electronico = input("Introduzca su corrreo electrónico:")
+        correo_electronico = input("Introduzca su correo electrónico:")
         Nombre = input("Introduzca su nombre:")
         Apellidos = input("Introduzca sus apellidos:")
-        fecha_nacimiento = input("Fecha de nacimiento (aaa-mm-dd):")
-        peso:int=int(input("Peso (en kg):"))
-        while peso<=0:
+        fecha_nacimiento = input("Fecha de nacimiento (aaaa-mm-dd):")
+        peso = int(input("Peso (en kg):"))
+        while peso <= 0:
             print("El peso es inválido")
-            peso:int=int(input("Vuelva a introducir el peso(en kg):"))
-        Altura:int=int(input("Altura (en cm):"))
-        while Altura<=30:
+            peso = int(input("Vuelva a introducir el peso (en kg):"))
+        Altura = int(input("Altura (en cm):"))
+        while Altura <= 30:
             print("La altura es improbable")
-            Altura:int=int(input("Vuelva a introducir la altura:"))
-        sexo=input("Sexo (Masculino/Femenino):")
-        tipo_atleta="Premium"
-        fecha_alta=datetime.now().date()
-        metodo_pago=input("Introduzca el método de pago (Transferencia/tarjeta):")
+            Altura = int(input("Vuelva a introducir la altura:"))
+        tipo_atleta = "Premium"
+        fecha_alta = datetime.now().date()
+        metodo_pago = input("Introduzca el método de pago (Transferencia/tarjeta):")
         while metodo_pago.upper() != "TRANSFERENCIA" and metodo_pago.upper() != "TARJETA":
             print("El método de pago no es correcto")
             metodo_pago = input("Vuelva a introducir el método de pago (Transferencia/tarjeta):")
-        if metodo_pago.upper()=="TRANSFERENCIA":
-            Iban=input("Introduzca su IBAN de la cuenta:")
-            Numero_tarjeta=None
-            fecha_caducidad=None
-            Cvv=None
-            self.atleta.insertAtletaPremium(correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv,sexo)
-            print(f"Los datos han sido introducidos correctamente!",{Nombre},{Apellidos},{Altura},{Iban})
-        elif metodo_pago.upper()=="TARJETA":
-            Numero_tarjeta=input("Introduzca su numero de tarjeta:")
-            fecha_caducidad=input("Introduzca la fecha de caducidad de la tarjeta (mm-dd):")
-            Cvv=input("Introduzca su CVV de la tarjeta:")
-            Iban=None
-            self.atleta.insertAtletaPremium(correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv,sexo)
-            print(f"Los datos han sido introducidos correctamente!",{Nombre},{Apellidos},{Altura},{Numero_tarjeta})
+
+        if metodo_pago.upper() == "TRANSFERENCIA":
+            Iban = input("Introduzca su IBAN de la cuenta:")
+            Numero_tarjeta = None
+            fecha_caducidad = None
+            Cvv = None
+            self.atleta.insertAtletaPremium(correo_electronico, Nombre, Apellidos, fecha_alta, fecha_nacimiento, peso, Altura, tipo_atleta, Iban, Numero_tarjeta, fecha_caducidad, Cvv)
+            print(f"Los datos han sido introducidos correctamente! {Nombre} {Apellidos} {Altura} {Iban}")
+        elif metodo_pago.upper() == "TARJETA":
+            Numero_tarjeta = input("Introduzca su número de tarjeta:")
+            fecha_caducidad = input("Introduzca la fecha de caducidad de la tarjeta (mm-dd):")
+            
+            if fecha_caducidad:
+                fecha_caducidad_dt = datetime.strptime(fecha_caducidad, "%m-%d")
+                fecha_actual = datetime.now()
+                
+                if fecha_caducidad_dt < fecha_actual:
+                    print("La tarjeta ha caducado. Por favor, proporcione una tarjeta válida.")
+                    return  # Salir del método si la tarjeta ha caducado
+            
+            Cvv = input("Introduzca su CVV de la tarjeta:")
+            Iban = None  # No se ha definido 'sexo', ajusta según tus necesidades
+            self.atleta.insertAtletaPremium(correo_electronico, Nombre, Apellidos, fecha_alta, fecha_nacimiento, peso, Altura, tipo_atleta, Iban, Numero_tarjeta, fecha_caducidad, Cvv)
+            print(f"Los datos han sido introducidos correctamente! {Nombre} {Apellidos} {Altura} {Numero_tarjeta}")
+
 
     def introducir_Objetivos(self):
         correo_electronico=input("Introduzca su correo electrónico:")
