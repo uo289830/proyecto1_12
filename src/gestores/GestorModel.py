@@ -42,9 +42,10 @@ class GestorModel:
     
     def obtener_num_deportistas_inscritos(self):
         query = """
-            SELECT ae.nombre_entidad, ae.nombre_activ_entidad, COUNT(i.idinscripcion) AS num_inscritos
+            SELECT ae.nombre_entidad, ae.nombre_activ_entidad, COUNT(i.idinscripcion) AS num_inscritos, ae.fecha
             FROM ActividadEntidades ae
             LEFT JOIN Inscripciones i ON ae.idactividadentidad = i.idactividadentidad
-            GROUP BY ae.nombre_entidad, ae.nombre_activ_entidad
+            GROUP BY ae.nombre_entidad, ae.nombre_activ_entidad, ae.fecha
+
         """
         return self.db.executeQuery(query)

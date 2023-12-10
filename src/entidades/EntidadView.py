@@ -1,5 +1,6 @@
 import sys
 from entidades.EntidadModel import EntidadModel
+from tabulate import tabulate
 
 class EntidadView:
     
@@ -67,27 +68,43 @@ class EntidadView:
 
     
 
+    
+
     def verInscripcionesActividad(self):
         nombre_entidad = input("Ingrese el nombre de la entidad: ")
         actividades_entidad = self.actividad_ent.obtener_actividades_entidad(nombre_entidad)
-        
+
         if actividades_entidad:
             print("Lista de Actividades:")
-            for actividad in actividades_entidad:
-                print(f"ID: {actividad['idactividadentidad']}, Nombre: {actividad['nombre_activ_entidad']}")
+            actividades_table = [["ID", "Nombre"]]
 
-            id_seleccionado = int(input("Seleccione el ID de la actividad: "))
-            
+            for actividad in actividades_entidad:
+                actividades_table.append([actividad['idactividadentidad'], actividad['nombre_activ_entidad']])
+
+            print(tabulate(actividades_table, headers="firstrow", tablefmt="grid"))
+
+            id_seleccionado = int(input("Seleccione una de la actividad: "))
             resultados_inscripciones = self.actividad_ent.obtener_inscripciones(id_seleccionado)
 
             if resultados_inscripciones:
                 print("Lista de Inscripciones:")
+                inscripciones_table = [["Actividad", "Correo Electrónico", "Tipo de Atleta", "Cuota"]]
+
                 for inscripcion in resultados_inscripciones:
-                    print(f"Actividad: {inscripcion['nombre_actividad']}, Correo Electrónico: {inscripcion['correo_electronico']}, Tipo de Atleta: {inscripcion['tipo_atleta']}")
+                    tipo_atleta = inscripcion['tipo_atleta']
+                    if tipo_atleta.lower() == 'free':
+                        cuota = inscripcion['coste_UsFree']
+                    else:
+                        cuota = 0
+
+                    inscripciones_table.append([inscripcion['nombre_actividad'], inscripcion['correo_electronico'], tipo_atleta, cuota])
+
+                print(tabulate(inscripciones_table, headers="firstrow", tablefmt="grid"))
             else:
                 print("No hay inscripciones disponibles para esta actividad.")
         else:
-            print("No hay actividades disponibles para esta entidad.")    
+            print("No hay actividades disponibles para esta entidad.")
+
     
     
     def quit(self):

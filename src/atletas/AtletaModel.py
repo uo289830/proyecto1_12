@@ -502,11 +502,14 @@ class AtletaModel:
             # Convierte la lista de resultados a una lista de tipos
             return [tipo['nombre_subtipo'] for tipo in tipos_actividades] 
     
-    def obtenerdatosInscripción(self,correo_electronico):
-        query="""SELECT ae.nombre_activ_entidad AS nombre_actividad, ae.fecha, ae.hora_inicio, 
-            ae.lugar FROM ActividadEntidades ae INNER JOIN Inscripciones i ON 
-            ae.idactividadentidad=i.idactividadentidad WHERE correo_electronico=?"""
-        return self.db.executeQuery(query,(correo_electronico,))
+    def obtenerdatosInscripción(self, correo_electronico):
+        query = """SELECT ae.nombre_activ_entidad AS nombre_actividad, ae.fecha, ae.hora_inicio,
+            ae.lugar, ae.coste_UsFree AS cuota, A.tipo_atleta
+            FROM ActividadEntidades ae INNER JOIN Inscripciones i ON ae.idactividadentidad = i.idactividadentidad
+            INNER JOIN Atletas A ON i.correo_electronico = A.correo_electronico
+            WHERE A.correo_electronico=?
+        """
+        return self.db.executeQuery(query, (correo_electronico,))
     
     def atletasEnRango(self,fecha_nacimiento_maxima, fecha_nacimiento_minima):
         query = """

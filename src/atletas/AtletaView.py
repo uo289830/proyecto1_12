@@ -399,15 +399,26 @@ class AtletaView:
             plt.show()
 
     def listaActividadesInscritos(self):
-        correo_electronico = input("Introduzca su corrreo electrónico:")
-        while correo_electronico in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
-            print("EL correo ya está registrado")
-            correo_electronico=input("Vuelva a introducir su correo electrónico:")
-        resultados=self.atleta.obtenerdatosInscripción(correo_electronico)
+        correo_electronico = input("Introduzca su correo electrónico: ")
+
+        resultados = self.atleta.obtenerdatosInscripción(correo_electronico)
+
         if resultados:
             print("Lista de Actividades:")
-            headers = ["Nombre", "Fecha", "Hora", "Lugar"]
-            table_data = [[actividad['nombre_actividad'], actividad['fecha'], actividad['hora_inicio'], actividad['lugar']] for actividad in resultados]
+            headers = ["Nombre", "Fecha", "Hora", "Lugar", "Cuota"]
+            table_data = []
+
+            for actividad in resultados:
+                cuota = 0 if actividad['tipo_atleta'].lower() == 'premium' else actividad.get('cuota', 'No disponible')
+
+                table_data.append([
+                    actividad['nombre_actividad'],
+                    actividad['fecha'],
+                    actividad['hora_inicio'],
+                    actividad['lugar'],
+                    cuota
+                ])
+
             print(tabulate(table_data, headers=headers, tablefmt="grid"))
         else:
             print("No hay actividades disponibles para este atleta.")

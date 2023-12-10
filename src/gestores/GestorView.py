@@ -1,6 +1,8 @@
 import sys
 from gestores.GestorModel import GestorModel
 from actividades.ActividadModel import ActividadModel
+from tabulate import tabulate
+from datetime import datetime
 
 class GestorView:
     
@@ -60,11 +62,33 @@ class GestorView:
 
     def inscripciones(self):
         res = self.gestor.obtener_num_deportistas_inscritos()
-        for inscripcion in res:
-            print(f"Nombre de la Entidad: {inscripcion ['nombre_entidad']}, Nombre de la Actividad: {inscripcion ['nombre_activ_entidad']}, "
-                f"Número inscritos: {inscripcion ['num_inscritos']}")
 
+        if res:
+            print("Tabla de Inscripciones:")
+            inscripciones_table = [["Nombre de la Entidad", "Nombre de la Actividad", "Fecha de la Actividad", "Número de Inscritos"]]
 
+            fecha_actual = datetime.now()  # Fecha y hora actuales
+
+            for inscripcion in res:
+                entidad = inscripcion['nombre_entidad']
+                actividad = inscripcion['nombre_activ_entidad']
+                fecha_actividad_str = inscripcion['fecha']  # Ajusta según el nombre real de tu campo de fecha
+                num_inscritos = inscripcion['num_inscritos']
+
+                try:
+                    # Convierte la cadena de fecha a un objeto datetime
+                    fecha_actividad = datetime.strptime(fecha_actividad_str, "%Y-%m-%d")
+
+                    # Compara las fechas
+                    if fecha_actividad > fecha_actual:
+                        inscripciones_table.append([entidad, actividad, fecha_actividad_str, num_inscritos])
+
+                except ValueError as e:
+                    print(f"Error al procesar la fecha: {e}. Fecha: {fecha_actividad_str}")
+
+            print(tabulate(inscripciones_table, headers="firstrow", tablefmt="grid"))
+        else:
+            print("No hay inscripciones disponibles.")
 
     def quit(self):
         print("Cerrando opciones.")

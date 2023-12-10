@@ -55,18 +55,18 @@ class EntidadModel:
 
     def obtener_inscripciones(self, id_actividad):
         query = """
-            SELECT ae.nombre_activ_entidad AS nombre_actividad, A.correo_electronico, A.tipo_atleta
+            SELECT ae.nombre_activ_entidad AS nombre_actividad, A.correo_electronico, A.tipo_atleta, ae.coste_UsFree
             FROM Inscripciones i
             INNER JOIN ActividadEntidades ae ON i.idactividadentidad = ae.idactividadentidad
             INNER JOIN Atletas A ON i.correo_electronico = A.correo_electronico
             WHERE ae.idactividadentidad = ?
         """
-
         return self.db.executeQuery(query, (id_actividad,))
+
     
     def obtener_actividades_entidad(self, nombre_entidad):
         query = """
-            SELECT idactividadentidad, nombre_activ_entidad
+            SELECT idactividadentidad, nombre_activ_entidad, coste_UsFree
             FROM ActividadEntidades
             WHERE nombre_entidad = ?
         """
