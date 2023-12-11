@@ -12,7 +12,7 @@ class GestorView:
             "1": self.mostrarEstadoForma,
             "2": self.mostrarDeportistasMasActivos,
             "3": self.inscripciones,
-            "4": self.quit
+            "4": self
         }
         
     def displayMenu(self):
@@ -20,7 +20,7 @@ class GestorView:
               1.- Mostrar el estado de forma \n
               2.- Obtener deportistas más activos por tipo de actividad
               3.- Mostrar inscripciones
-              4.- Salir 
+              4.- Volver al menu principal
               """)
         
     def run(self):
@@ -29,6 +29,8 @@ class GestorView:
             choice = input("Introducir opción: ")
             action = self.choices.get(choice)
             if action:
+                if choice=="4":
+                    return
                 action()
             else:
                 print("{0} no es una opción válida".format(choice))

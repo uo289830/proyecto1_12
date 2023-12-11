@@ -6,14 +6,14 @@ class ActividadView:
     def __init__(self):
         self.actividad=ActividadModel()
         self.choices= { "1": self.nuevaActividad,
-                         "2": self.quit
+                         "2": self
                        }
         
            
     def displayMenu (self):
         print(""" Opciones: \n
               1.- Introducir una nueva actividad \n
-              2.- Salir 
+              2.- Volver al menú principal
               """)
         
     #Muestra la lista de opciones y permite la selección
@@ -23,6 +23,8 @@ class ActividadView:
             choice = input("Introducir opción: ")
             action = self.choices.get(choice)
             if action:
+                if choice=="2":
+                    return
                 action()
             else:
                 print("{0} no es una opción valida".format(choice))

@@ -33,7 +33,7 @@ class AtletaView:
                          "13":self.generar_graficos_atleta,
                          "14":self.listaActividadesInscritos,
                          "15":self.compararConOtros,
-                         "16": self.quit
+                         "16": self
                        }
         
     def displayMenu (self):
@@ -53,7 +53,7 @@ class AtletaView:
               13.- Generar gráficos
               14.- Ver actividades inscrito
               15.- Comparación con otros atletas
-              16.- Salir 
+              16.- Volver al menu principal
               """)
  
     #Muestra la lista de opciones y permite la selección
@@ -63,6 +63,8 @@ class AtletaView:
             choice = input("Introducir opción: ")
             action = self.choices.get(choice)
             if action:
+                if choice=="16":
+                    return
                 action()
             else:
                 print("{0} no es una opción valida".format(choice))

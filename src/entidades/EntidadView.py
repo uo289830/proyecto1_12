@@ -10,7 +10,7 @@ class EntidadView:
         self.actividad_ent=EntidadModel()
         self.choices= { "1": self.nuevaActividadEntidad,
                         "2":self.verInscripcionesActividad,
-                        "3": self.quit
+                        "3":self
                        }
         
            
@@ -18,7 +18,7 @@ class EntidadView:
         print(""" Opciones: \n
               1.- Introducir una nueva actividad \n
               2.- Ver inscripciones por actividad
-              3.- Salir 
+              3.- Volver al menu principal
               """)
         
     #Muestra la lista de opciones y permite la selección
@@ -28,6 +28,8 @@ class EntidadView:
             choice = input("Introducir opción: ")
             action = self.choices.get(choice)
             if action:
+                if choice=="3":
+                    return
                 action()
             else:
                 print("{0} no es una opción valida".format(choice))
@@ -116,4 +118,4 @@ class EntidadView:
     
     def quit(self):
         print("Cerrando opciones.")
-        sys.exit(0) 
+        sys.exit[0]
