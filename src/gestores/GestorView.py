@@ -8,6 +8,7 @@ class GestorView:
     
     def __init__(self):
         self.gestor = GestorModel()
+        self.actividad=ActividadModel()
         self.choices = { 
             "1": self.mostrarEstadoForma,
             "2": self.mostrarDeportistasMasActivos,
@@ -45,11 +46,11 @@ class GestorView:
                 print("No existe usuario con este email")
         estado_de_forma = self.gestor.calcularEstadoForma(correo_electronico)
         if estado_de_forma < 1:
-            print("Estado de forma malo")
+            print(f"{estado_de_forma}, Estado de forma malo")
         elif estado_de_forma == 1:
-            print("Buena forma")
+            print(f"{estado_de_forma}, Buena forma")
         else:
-            print("Muy buena forma")
+            print(f"{estado_de_forma},Muy buena forma")
 
     def mostrarDeportistasMasActivos(self):
         tipo_actividad = input("Introduce el tipo de actividad: ")

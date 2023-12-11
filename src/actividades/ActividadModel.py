@@ -1,7 +1,7 @@
 from util.database import DataBase
 import sqlite3
 from datetime import datetime, timedelta
-from util.checkdate import DateChecker
+
 
 
 class ActividadModel:
@@ -23,12 +23,15 @@ class ActividadModel:
             emails.append(correo['correo_electronico'])
         return emails
     
-    def insertActividad(self, nombre_actividad, nombre_subtipo, fecha, duracion, localizacion, distancia, FCmax, FCmin, correo_electronico):
-        # Verifica si la fecha tiene el formato válido
-        if not DateChecker.checkdate(fecha):
-            print("Error: La fecha no tiene el formato válido (aaaa-mm-dd).")
-            return
+    def negs(self,d):
+        d=float(d)
+        if d<0:
+            return False
+        else:
+            return True
         
+    def insertActividad(self, nombre_actividad, nombre_subtipo, fecha, duracion, localizacion, distancia, FCmax, FCmin, correo_electronico):
+       
         # Verifica si el atleta es "Free" y ha alcanzado el límite de tipos/subtipos
         if self.esDeportistaFree(correo_electronico):
             tipos_actuales = self.obtenerTiposActividades(correo_electronico)

@@ -1,5 +1,6 @@
 import sys
 from actividades.ActividadModel import ActividadModel
+from util.checkdate import DateChecker
 
 class ActividadView:
     
@@ -30,12 +31,43 @@ class ActividadView:
                 print("{0} no es una opción valida".format(choice))
 
     def nuevaActividad(self):
-        fecha = input("Fecha de la actividad (aaaa-mm-dd):")
-        duracion = input("Duración de la actividad:")
+        while True:
+            fecha = input("Fecha de la actividad (aaaa-mm-dd):")
+         # Verifica si la fecha tiene el formato válido
+            if not DateChecker.checkdate(fecha):
+                print("Error: La fecha no tiene el formato válido (aaaa-mm-dd).")
+            else:
+                break
+        
+        while True:
+            duracion = input("Duración de la actividad:")
+            s=self.negs(duracion)
+            if s==False:
+                print("Duración inválida")
+            else:
+                break
         localizacion = input("Lugar en el que se realizó la actividad:")
-        distancia = input("Distancia recorrida:")
-        FCmax = input("FCmax:")
-        FCmin = input("FCmin:")
+        while True:
+            distancia = input("Distancia recorrida:")
+            s=self.negs(distancia)
+            if s==False:
+                print("Distancia inválida")
+            else:
+                break
+        while True:
+            FCmax = input("FCmax:")
+            s=self.negs(FCmax)
+            if s==False:
+                print("FCMax inválida")
+            else:
+                break
+        while True:
+            FCmin = input("FCmin:")
+            s=self.negs(FCmin)
+            if s==False:
+                print("FCMin inválida")
+            else:
+                break
         nombreActividad = input("Nombre de la categoria:")
         actividades=self.actividad.actividades_disp()
         print("Lista de actividades disponibles:")
