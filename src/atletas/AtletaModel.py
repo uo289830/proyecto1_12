@@ -349,18 +349,42 @@ class AtletaModel:
 
     def obtenerActividadesExternas(self):
         query="SELECT nombre_entidad , nombre_activ_entidad ,descripcion ,fecha ,duracion_dias ,lugar ,plazas,coste_UsFree from ActividadEntidades"
-        return self.db.executeQuery(query)
+        from prettytable import PrettyTable
+
+    def obtenerActividadesExternas(self):
+        query = "SELECT nombre_entidad, nombre_activ_entidad, descripcion, fecha, duracion_dias, lugar, plazas, coste_UsFree FROM ActividadEntidades"
+        resultados = self.db.executeQuery(query)
+        if resultados:
+        # Obtener los nombres de las columnas
+        
+            columnas = resultados[0].keys()
+
+        # Crear una tabla
+            tabla = PrettyTable(['#'] + list(columnas))
+
+        # Agregar filas a la 
+            i=0
+            for resultado in (resultados):
+                tabla.add_row([i] + list(resultado.values()))
+                i+=1
+
+        # Devolver la tabla como string
+            return [str(tabla),resultados]
+        else:
+            return "No se encontraron resultados."
+
+
+
+
     
     def comprobarNumPlazas(self,idactividadentidad):
             
             query="SELECT COUNT(*) from Inscripciones where idactividadentidad = ?"
             numplazasocupadas=self.db.executeQuery(query,(idactividadentidad,))
             numplazasocupadas=numplazasocupadas[0]['COUNT(*)']
-            print(numplazasocupadas)
             query="SELECT plazas from ActividadEntidades where idactividadentidad= ?"
             numplazas=self.db.executeQuery(query,(idactividadentidad,))
             numplazas=numplazas[0]['plazas']
-            print(numplazas)
             if numplazas-numplazasocupadas<=0:
                 return False
             else:
@@ -370,7 +394,6 @@ class AtletaModel:
         query="SELECT COUNT(*) from Inscripciones where correo_electronico= ? and idactividadentidad=?"
         s=self.db.executeQuery(query,(correo,idactividad))
         s=s[0]['COUNT(*)']
-        print(s)
         if s!=0:
             return False
         else:
@@ -381,8 +404,6 @@ class AtletaModel:
         s=self.db.executeQuery(query,(correo,))
         for clave in s[0]:
             valor=s[0][clave]
-            print(clave)
-            print(valor)
             if valor==None:
                 return False
             else:

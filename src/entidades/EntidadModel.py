@@ -7,25 +7,6 @@ class EntidadModel:
     
     def __init__(self):
         self.db = DataBase("deporte.db")
-    def comprobarNomEnt(self,nombre):
-        query="SELECT COUNT(*) from ActividadEntidades where nombre_entidad=?"
-        s=self.db.executeQuery(query,(nombre,))
-        s=s[0]['COUNT(*)']
-        print(s)
-        if s!=0:
-            return False
-        else:
-            return True
-        
-    def comprobarNomActividad(self,nombre):
-        query="SELECT COUNT(*) from ActividadEntidades where nombre_activ_entidad=?"
-        s=self.db.executeQuery(query,(nombre,))
-        s=s[0]['COUNT(*)']
-        print(s)
-        if s!=0:
-            return False
-        else:
-            return True
     
     def comprobrarhora(sef,hora):
         horas=int(hora[0:2])
@@ -36,16 +17,22 @@ class EntidadModel:
             return False
         else:
             return True       
-        
+    def plazasneg(self,plazas):
+        plazas=float(plazas)
+        if plazas<0:
+           return False
+        else:
+            return True
+    def costeneg(self,coste):
+        coste=float(coste)
+        if coste<0:
+           return False
+        else:
+            return True
     
       # Inserción de los datos de una actividad (historia de usuario1 - Adriana)
     def insertActividadEntidad(self,nombre_entidad, nombre_actividad, descripcion, fecha, duracion,hora_inicio, localizacion,plazas, coste,info_ad):
-        while True:
-            if not DateChecker.checkdateEntidad(fecha):
-                print("La fecha no cumple con el formato esperado (aaaa-mm-dd).")
-                fecha = input("Por favor, ingrese la fecha nuevamente (aaaa-mm-dd): ")
-            else:
-                break  # La fecha es válida, salimos del bucle
+    
         query = """
                 INSERT INTO ActividadEntidades(nombre_entidad, nombre_activ_entidad ,descripcion ,fecha ,duracion_dias,hora_inicio,lugar,plazas,coste_UsFree,info_adicional)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)

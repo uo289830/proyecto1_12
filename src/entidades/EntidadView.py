@@ -1,6 +1,8 @@
 import sys
 from entidades.EntidadModel import EntidadModel
 from tabulate import tabulate
+from datetime import datetime, timedelta
+from util.checkdate import DateChecker 
 
 class EntidadView:
     
@@ -33,22 +35,15 @@ class EntidadView:
     
     #Vista para la HU1 Insertar una actividad (Adriana)
     def nuevaActividadEntidad(self):
-        while True:
-            nombre_entidad=input("Nombre de la entidad:")
-            s=self.actividad_ent.comprobarNomEnt(nombre_entidad)
-            if s==True:
-                break
-            else:
-                print("Nombre de Entidad no válido")
-        while True:
-            nombreActividad = input("Nombre de la actividad:")
-            s=self.actividad_ent.comprobarNomActividad(nombreActividad)
-            if s==True:
-                break
-            else:
-                print("Nombre de la actividad no válido")
+        nombre_entidad=input("Nombre de la entidad:")
+        nombreActividad = input("Nombre de la actividad:")
         descripcion=input("Breve descripcion de la actividad:")
-        fecha = input("Fecha de la actividad (aaaa-mm-dd):")
+        while True:
+            fecha = input("Fecha de la actividad (aaaa-mm-dd):")
+            if not DateChecker.checkdateEntidad(fecha):
+                print("La fecha no es válida.")
+            else:
+                break  
         duracion = input("Duración de la actividad en días:")
         while True:
              hora=input("Hora de inicio de la actividad(hh:mm):")
@@ -58,8 +53,20 @@ class EntidadView:
              else:
                  print("Fecha de inicio inválida")                   
         localizacion = input("Lugar en el que se realizará la actividad:")
-        plazas=input("Numero de plazas disponibles:")
-        coste=input("Coste para usuarios FREE:")
+        while True:
+            plazas=input("Numero de plazas disponibles:")
+            s=self.actividad_ent.plazasneg(plazas)
+            if s==True:
+                break
+            else:
+                print("Número de plazas inválido")
+        while True:
+            coste=input("Coste para usuarios FREE:")
+            s=self.actividad_ent.costeneg(coste)
+            if s==True:
+                break
+            else:
+                print("Coste para ususarios Free inválido") 
         info=input("Información adicional acerca de la carrera o de gestion de inscripcion:")
        
         

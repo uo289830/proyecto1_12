@@ -335,12 +335,9 @@ class AtletaView:
             else:
                 print("No existe usuario con este email")
         actividades=self.atleta.obtenerActividadesExternas()
-        i=0
-        for actividad in actividades:
-            print(f"{i}. Nombre de la entidad: {actividad['nombre_entidad']}, Nombre de la actividad: {actividad['nombre_activ_entidad']}, Descripción: {actividad['descripcion']} Fecha: {actividad['fecha']}, Duración: {actividad['duracion_dias']}, Ubicación: {actividad['lugar']},Numero de plazas: {actividad['plazas']},Coste para ususarios FREE: {actividad['coste_UsFree']}")
-            i+=1
+        print(actividades[0])
         actividad_inscricion=input("Introduce el numero de actividad al que desea inscribirse:")
-        actividad=actividades[int(actividad_inscricion)]
+        actividad=actividades[1][int(actividad_inscricion)]
         self.atleta.registrar_inscripcion(correo_electronico,actividad)
        
         
