@@ -72,15 +72,17 @@ class AtletaModel:
         return self.db.executeQuery(query)
 
     #Obtiene el id de una actividad especificada por su nombre.
-    def getIdactividad (self,nameactividad):
-        query = """select idactividad from Actividades
-                   where Actividades.nombre_actividad = ?
+    def getIdactividad(self, nameactividad):
+        query = """SELECT idactividad FROM Actividades
+                WHERE Actividades.nombre_actividad = ?
                 """
-        res = self.db.executeQuery(query,(nameactividad,)) 
-        if len(res)==1:
-            return res[0].get("id")
+
+        res = self.db.executeQuery(query, (nameactividad,))
+
+        if len(res) == 1:
+            return res[0].get("idactividad")
         else:
-            return None    
+            return None  
     
     
     def historia2(self,nameactividad,correo_electronico):

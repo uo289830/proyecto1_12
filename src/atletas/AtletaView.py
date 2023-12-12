@@ -124,12 +124,21 @@ class AtletaView:
    
   
     def showatletas(self):
-        nameactividad=input("Introduzca tipo de actividad:") 
+        nameactividad=input("Introduzca tipo de actividad:").lower()
         idactividad = self.atleta.getIdactividad(nameactividad)
         if idactividad==None:
             print ("No existe el tipo de actividad", nameactividad)
+            return
         correo_electronico=input("Introducir su correo electronico: ")
+        correo_electronico=correo_electronico.lower()
+        while correo_electronico not in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("EL correo no es válido")
+            correo_electronico=input("Vuelva a introducir su correo electrónico:")
         correo_electronico2=input("Introducir el correo del atleta a comparar: ") 
+        correo_electronico2=correo_electronico2.lower()
+        while correo_electronico2 not in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("EL correo no es válido")
+            correo_electronico2=input("Vuelva a introducir el correo electrónico del atleta a comparar:")
         atletasPremium=self.atleta.getAtletasPremium()
         for atleta in atletasPremium:
             correo_actual = atleta['correo_electronico']
