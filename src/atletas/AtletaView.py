@@ -217,7 +217,10 @@ class AtletaView:
      
     #Vista para la HU1 registrar un usuario Free
     def nuevaAtletaFree(self):
-        Correo_electronico = input("Introduzca su corrreo electrónico:")
+        correo_electronico = input("Introduzca su corrreo electrónico:").lower()
+        while correo_electronico in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("EL correo ya está registrado")
+            correo_electronico=input("Vuelva a introducir su correo electrónico:")
         Nombre = input("Introduzca su nombre:")
         Apellidos = input("Introduzca sus apellidos:")
         fecha_nacimiento = input("Fecha de nacimiento (aaa-mm-dd):")
@@ -235,11 +238,15 @@ class AtletaView:
         Numero_tarjeta=None
         fecha_caducidad=None
         Cvv=None        
-        self.atleta.insertAtletaFree(Correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv)
+        self.atleta.insertAtletaFree(correo_electronico,Nombre,Apellidos,fecha_alta,fecha_nacimiento,peso,Altura,tipo_atleta,Iban,Numero_tarjeta, fecha_caducidad,Cvv)
+        print(f"Los datos han sido introducidos correctamente! {Nombre} {Apellidos} {Altura}")
     
     #Vista para la HU2 registrar un usuario Premium
     def nuevaAtletaPremium(self):
-        correo_electronico = input("Introduzca su correo electrónico:")
+        correo_electronico = input("Introduzca su corrreo electrónico:").lower()
+        while correo_electronico in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("EL correo ya está registrado")
+            correo_electronico=input("Vuelva a introducir su correo electrónico:")
         Nombre = input("Introduzca su nombre:")
         Apellidos = input("Introduzca sus apellidos:")
         fecha_nacimiento = input("Fecha de nacimiento (aaaa-mm-dd):")
@@ -253,34 +260,37 @@ class AtletaView:
             Altura = int(input("Vuelva a introducir la altura:"))
         tipo_atleta = "Premium"
         fecha_alta = datetime.now().date()
-        metodo_pago = input("Introduzca el método de pago (Transferencia/tarjeta):")
-        while metodo_pago.upper() != "TRANSFERENCIA" and metodo_pago.upper() != "TARJETA":
+        metodo_pago = input("Introduzca el método de pago (Transferencia/tarjeta):").upper()
+        while metodo_pago.upper() not in ["TRANSFERENCIA", "TARJETA"]:
             print("El método de pago no es correcto")
             metodo_pago = input("Vuelva a introducir el método de pago (Transferencia/tarjeta):")
 
+        fecha_caducidad = None
+        Numero_tarjeta = None
+        Cvv = None
+        Iban = None
+
         if metodo_pago.upper() == "TRANSFERENCIA":
             Iban = input("Introduzca su IBAN de la cuenta:")
-            Numero_tarjeta = None
-            fecha_caducidad = None
-            Cvv = None
-            self.atleta.insertAtletaPremium(correo_electronico, Nombre, Apellidos, fecha_alta, fecha_nacimiento, peso, Altura, tipo_atleta, Iban, Numero_tarjeta, fecha_caducidad, Cvv)
-            print(f"Los datos han sido introducidos correctamente! {Nombre} {Apellidos} {Altura} {Iban}")
         elif metodo_pago.upper() == "TARJETA":
-            Numero_tarjeta = input("Introduzca su número de tarjeta:")
-            fecha_caducidad = input("Introduzca la fecha de caducidad de la tarjeta (mm-dd):")
-            
-            if fecha_caducidad:
-                fecha_caducidad_dt = datetime.strptime(fecha_caducidad, "%m-%d")
-                fecha_actual = datetime.now()
+            while True:
+                Numero_tarjeta = input("Introduzca su número de tarjeta:")
+                fecha_caducidad = input("Introduzca la fecha de caducidad de la tarjeta (mm-dd):")
                 
-                if fecha_caducidad_dt < fecha_actual:
-                    print("La tarjeta ha caducado. Por favor, proporcione una tarjeta válida.")
-                    return  # Salir del método si la tarjeta ha caducado
-            
-            Cvv = input("Introduzca su CVV de la tarjeta:")
-            Iban = None  # No se ha definido 'sexo', ajusta según tus necesidades
-            self.atleta.insertAtletaPremium(correo_electronico, Nombre, Apellidos, fecha_alta, fecha_nacimiento, peso, Altura, tipo_atleta, Iban, Numero_tarjeta, fecha_caducidad, Cvv)
-            print(f"Los datos han sido introducidos correctamente! {Nombre} {Apellidos} {Altura} {Numero_tarjeta}")
+                if fecha_caducidad:
+                    fecha_caducidad_dt = datetime.strptime(fecha_caducidad, "%m-%d")
+                    fecha_actual = datetime.now()
+                    
+                    if fecha_caducidad_dt < fecha_actual:
+                        print("La tarjeta ha caducado. Proporcione una tarjeta válida.")
+                    else:
+                        break
+                else:
+                    print("Fecha de caducidad inválida. Vuelva a intentar.")
+
+        self.atleta.insertAtletaPremium(correo_electronico, Nombre, Apellidos, fecha_alta, fecha_nacimiento, peso, Altura, tipo_atleta, Iban, Numero_tarjeta, fecha_caducidad, Cvv)
+        print(f"Los datos han sido introducidos correctamente! {Nombre} {Apellidos} {Altura} {Numero_tarjeta}")
+
 
 
     def introducir_Objetivos(self):
