@@ -41,7 +41,7 @@ class ActividadView:
         
         while True:
             duracion = input("Duración de la actividad:")
-            s=self.negs(duracion)
+            s=self.actividad.negs(duracion)
             if s==False:
                 print("Duración inválida")
             else:
@@ -49,21 +49,21 @@ class ActividadView:
         localizacion = input("Lugar en el que se realizó la actividad:")
         while True:
             distancia = input("Distancia recorrida:")
-            s=self.negs(distancia)
+            s=self.actividad.negs(distancia)
             if s==False:
                 print("Distancia inválida")
             else:
                 break
         while True:
             FCmax = input("FCmax:")
-            s=self.negs(FCmax)
+            s=self.actividad.negs(FCmax)
             if s==False:
                 print("FCMax inválida")
             else:
                 break
         while True:
             FCmin = input("FCmin:")
-            s=self.negs(FCmin)
+            s=self.actividad.negs(FCmin)
             if s==False:
                 print("FCMin inválida")
             else:

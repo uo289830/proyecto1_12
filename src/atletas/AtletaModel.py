@@ -100,12 +100,15 @@ class AtletaModel:
     def obtenerMet (self,subtipo,correo,sexo):
         query="SELECT peso from Atletas where correo_electronico=?"
         peso=self.db.executeQuery(query,(correo,))
+        peso=peso[0]['peso']
         peso=float(peso)
         query="SELECT Altura from Atletas where correo_electronico=?"
         altura=self.db.executeQuery(query,(correo,))
+        altura=altura[0]['Altura']
         altura=float(altura)
         query="SELECT fecha_nacimiento from Atletas where correo_electronico=?"
         fecha_nacimiento=self.db.executeQuery(query,(correo,))
+        fecha_nacimiento=fecha_nacimiento[0]['fecha_nacimiento']
         edad=self.calcular_edad(fecha_nacimiento)
         edad=float(edad)
         sexo=str(sexo)
