@@ -366,21 +366,14 @@ class AtletaModel:
 
 
     def obtenerActividadesExternas(self):
-        query="SELECT nombre_entidad , nombre_activ_entidad ,descripcion ,fecha ,duracion_dias ,lugar ,plazas,coste_UsFree from ActividadEntidades"
-        from prettytable import PrettyTable
-
-    def obtenerActividadesExternas(self):
         query = "SELECT nombre_entidad, nombre_activ_entidad, descripcion, fecha, duracion_dias, lugar, plazas, coste_UsFree FROM ActividadEntidades"
         resultados = self.db.executeQuery(query)
         if resultados:
-        # Obtener los nombres de las columnas
         
             columnas = resultados[0].keys()
 
-        # Crear una tabla
             tabla = PrettyTable(['#'] + list(columnas))
 
-        # Agregar filas a la 
             i=0
             for resultado in (resultados):
                 tabla.add_row([i] + list(resultado.values()))
@@ -392,7 +385,17 @@ class AtletaModel:
             return "No se encontraron resultados."
 
 
+    def comprobarfechainscripcion(self,idactividad):
+        query="SELECT fecha from ActividadEntidades where idactividadentidad = ?"
+        fecha_actividad=self.db.executeQuery(query,(idactividad,))
+        fecha_actividad=fecha_actividad[0]['fecha']
 
+        fecha_actual = datetime.now().date()
+        fecha_limite = datetime.strptime(fecha_actividad, "%Y-%m-%d").date()
+        if fecha_actual < fecha_limite:
+            return True
+        else:
+            return False
 
     
     def comprobarNumPlazas(self,idactividadentidad):
@@ -420,12 +423,12 @@ class AtletaModel:
     def comprobarMetPago(self,correo):
         query="SELECT IBAN, Numero_tarjeta, fecha_caducidad,CVV from Atletas where correo_electronico=?"
         s=self.db.executeQuery(query,(correo,))
+        a=True
         for clave in s[0]:
             valor=s[0][clave]
             if valor==None:
-                return False
-            else:
-                return True
+                a=False
+        return a
             
     def generar_justificante(self,idactividad,correo):
         query="SELECT nombre from Atletas where correo_electronico=?"
@@ -451,30 +454,40 @@ class AtletaModel:
         idactividad=idactividad['idactividadentidad']
         correo_electronico=str(correo_electronico)
         
-        s=self.comprobarCorreo(correo_electronico,idactividad)
-        if s==True:
-            a=self.comprobarNumPlazas(idactividad)
-            if a==True:
-                l=self.obtenerTipoAtleta(correo_electronico)
-                if l=="Free":
-                    n=self.comprobarMetPago(correo_electronico)
-                    if n==False:
-                        print("MÉTODO DE PAGO NO VÁLIDO, ACTUALICE SU MÉTODO DE PAGO")
+        f=self.comprobarfechainscripcion(idactividad)
+        if f==True:
+            s=self.comprobarCorreo(correo_electronico,idactividad)
+            
+            if s==True:
+                a=self.comprobarNumPlazas(idactividad)
+                
+                if a==True:
+                    l=self.obtenerTipoAtleta(correo_electronico)
+                   
+                    if l=="Free":
+                        n=self.comprobarMetPago(correo_electronico)
+                        print(n)
+                        if n==False:
+                           print("MÉTODO DE PAGO NO VÁLIDO, ACTUALICE SU MÉTODO DE PAGO")
+                        else:
+                           query = """INSERT INTO Inscripciones(correo_electronico, idactividadentidad)VALUES (?, ?)"""
+                           self.db.executeQuery(query, (correo_electronico, idactividad))
+                           print("se ha registrado la inscripcion")
+                           print("te enviaremos el justificante al email")
+                           self.generar_justificante(idactividad,correo_electronico)
                     else:
                         query = """INSERT INTO Inscripciones(correo_electronico, idactividadentidad)VALUES (?, ?)"""
                         self.db.executeQuery(query, (correo_electronico, idactividad))
                         print("se ha registrado la inscripcion")
+                        print("te enviaremos el justificante al email")
                         self.generar_justificante(idactividad,correo_electronico)
                 else:
-                    query = """INSERT INTO Inscripciones(correo_electronico, idactividadentidad)VALUES (?, ?)"""
-                    self.db.executeQuery(query, (correo_electronico, idactividad))
-                    print("se ha registrado la inscripcion")
-                    self.generar_justificante(idactividad,correo_electronico)
+                    print("NO QUEDAN PLAZAS DISPONIBLES")
             else:
-                print("NO QUEDAN PLAZAS DISPONIBLES")
+                print("USUARIO YA REGISTRADO EN LA ACTIVIDAD")
         else:
-            print("USUARIO YA REGISTRADO EN LA ACTIVIDAD")
-            
+            print("INSCRIPCIÓN FUERA DE PLAZO")
+       
 
     
    
