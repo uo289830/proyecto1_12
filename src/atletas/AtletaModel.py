@@ -128,25 +128,38 @@ class AtletaModel:
         
         
     
-    def calcularConsumo(self,correoelectronico,inicio,fin,sexo):
-        #obtenemos las actividades en esa fecha
-        actividades=AtletaModel.busca_actividades(self,correoelectronico,inicio,fin)
-        listaconsumos=[]
-        min=20
-        max=0
-        for actividad in actividades:
-            subtipo= actividad['nombre_subtipo']
-            print(subtipo)
-            consumo= AtletaModel.obtenerMet(self,subtipo,correoelectronico,sexo) # type: ignore
-            listaconsumos.append(consumo)
-            if consumo<min:
-                min=consumo
-            if consumo>max:
-                max=consumo
-            print(f"Para la actividad {actividad['nombre_actividad']} el dia {actividad['fecha']} se obtuvo un consumo de {consumo}")
-        consumototal= sum(listaconsumos)
-        print(f"Consumo total: {consumototal}, Consumo minimo: {min}, Consumo maximo: {max}")
-        return consumototal
+    def calcularConsumo(self, correoelectronico, inicio, fin, sexo):
+        actividades = AtletaModel.busca_actividades(self, correoelectronico, inicio, fin)
+        if not actividades:
+            print("No hay actividades disponibles")
+        else:
+            listaconsumos = []
+
+            min_consumo = 20
+            max_consumo = 0
+
+            consumos_table = PrettyTable()
+            consumos_table.field_names = ["Nombre de la Actividad", "Fecha", "Consumo"]
+
+            for actividad in actividades:
+                subtipo = actividad['nombre_subtipo']
+                consumo = AtletaModel.obtenerMet(self, subtipo, correoelectronico, sexo)  # type: ignore
+                listaconsumos.append(consumo)
+
+                if consumo < min_consumo:
+                    min_consumo = consumo
+                if consumo > max_consumo:
+                   max_consumo = consumo
+
+                consumos_table.add_row([actividad['nombre_actividad'], actividad['fecha'], consumo])
+
+            consumototal = sum(listaconsumos)
+
+            result_table = consumos_table.get_string()
+            result_summary = f"Consumo total: {consumototal}, Consumo mínimo: {min_consumo}, Consumo máximo: {max_consumo}"
+ 
+            print(result_table)
+            print(result_summary)
         
              
     #h1s2 sara
