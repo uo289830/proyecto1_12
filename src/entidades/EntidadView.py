@@ -45,8 +45,14 @@ class EntidadView:
             if not DateChecker.checkdateEntidad(fecha):
                 print("La fecha no es válida.")
             else:
-                break  
-        duracion = input("Duración de la actividad en días:")
+                break 
+        while True:
+            duracion = input("Duración de la actividad en días:")
+            s=self.actividad_ent.plazasneg(duracion)
+            if s==True:
+                break
+            else:
+                print("Duración inválida")
         while True:
              hora=input("Hora de inicio de la actividad(hh:mm):")
              s=self.actividad_ent.comprobrarhora(hora) 

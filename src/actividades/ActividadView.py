@@ -69,15 +69,12 @@ class ActividadView:
             else:
                 break
         nombreActividad = input("Nombre de la categoria:")
+        print("Actividades disponibles")
         actividades=self.actividad.actividades_disp()
-        print("Lista de actividades disponibles:")
-        i=1
         listaact=[]
         for actividad in actividades:
-            print(f"{i}-{actividad['nombre_subtipo']}")
             listaact.append(actividad['nombre_subtipo'])
-            i+=1
-        print(listaact)
+            
         while True:
             nombreSubtipo=input("Nombre de la actividad:")
             if nombreSubtipo in listaact:

@@ -1,7 +1,7 @@
 from util.database import DataBase
 import sqlite3
 from datetime import datetime, timedelta
-
+from prettytable import PrettyTable
 
 
 class ActividadModel:
@@ -13,6 +13,16 @@ class ActividadModel:
     def actividades_disp(self):
         query = "SELECT nombre_subtipo FROM Subtipos;"
         actividades = self.db.executeQuery(query)
+        # Crear una tabla
+        tabla = PrettyTable()
+
+        # Definir columnas de la tabla
+        tabla.field_names = ["Índice", "Nombre del Subtipo"]
+
+        # Llenar la tabla con los datos de las actividades
+        for i, actividad in enumerate(actividades, start=1):
+            tabla.add_row([i, actividad['nombre_subtipo']])
+        print(tabla)
         return actividades
     
     def correovalido(self):

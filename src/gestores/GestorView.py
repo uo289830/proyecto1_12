@@ -45,12 +45,13 @@ class GestorView:
             else:
                 print("No existe usuario con este email")
         estado_de_forma = self.gestor.calcularEstadoForma(correo_electronico)
-        if estado_de_forma < 1:
-            print(f"{estado_de_forma}, Estado de forma malo")
+        print(f"Total de actividades del último mes : {estado_de_forma[0]} \n Total de actividades totales: {estado_de_forma[1]}")
+        if estado_de_forma[2] < 1:
+            print(f"{estado_de_forma[2]}, Estado de forma malo")
         elif estado_de_forma == 1:
-            print(f"{estado_de_forma}, Buena forma")
+            print(f"{estado_de_forma[2]}, Buena forma")
         else:
-            print(f"{estado_de_forma},Muy buena forma")
+            print(f"{estado_de_forma[2]},Muy buena forma")
 
     def mostrarDeportistasMasActivos(self):
         tipo_actividad = input("Introduce el tipo de actividad: ")

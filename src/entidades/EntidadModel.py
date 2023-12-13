@@ -19,7 +19,7 @@ class EntidadModel:
             return True       
     def plazasneg(self,plazas):
         plazas=float(plazas)
-        if plazas<0:
+        if plazas<=0:
            return False
         else:
             return True

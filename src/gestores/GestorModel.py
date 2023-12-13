@@ -11,7 +11,8 @@ class GestorModel:
     
     def obtenerActividadesUltimoMes(self, correo_electronico):
         fecha_hace_un_mes = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
-        query = "SELECT COUNT(*) FROM Actividades WHERE correo_electronico = ? AND fecha >= ?"
+        print(fecha_hace_un_mes)
+        query = "SELECT COUNT(*) FROM Actividades WHERE correo_electronico = ? AND fecha <= ?"
         actividades_ultimo_mes = self.db.executeQuery(query, (correo_electronico, fecha_hace_un_mes))
         return actividades_ultimo_mes[0]['COUNT(*)'] if actividades_ultimo_mes else 0
 
@@ -27,7 +28,7 @@ class GestorModel:
 
         estado_de_forma = actividades_ultimo_mes / actividades_totales if actividades_totales > 0 else 0.0
 
-        return estado_de_forma
+        return [actividades_ultimo_mes,actividades_totales,estado_de_forma]
 
     def obtenerDeportistasMasActivos(self, tipo_actividad):
         query = """
