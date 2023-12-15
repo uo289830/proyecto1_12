@@ -5,6 +5,7 @@ from entidades.EntidadView import EntidadView
 from util.database import DataBase
 from dateutil.relativedelta import relativedelta
 
+
 def mostrar_menu():
     print("Seleccione una opción:")
     print("1. AtletaView")

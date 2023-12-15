@@ -591,6 +591,12 @@ class AtletaModel:
                 'sexo': result[0].get('sexo')
             }
         else:
-            return None  
+            return None
+
+    def obtenerActividadesDeportista(self, correo_electronico_otro):
+        query = """SELECT nombre_actividad, fecha, duracion FROM Actividades WHERE correo_electronico = ?"""
+        params = (correo_electronico_otro,)
+        result = self.db.executeQuery(query, params)
+        return result  
     
 

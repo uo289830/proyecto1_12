@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 import matplotlib.pyplot as plt
 import pandas as pd
 from tabulate import tabulate
+from prettytable import PrettyTable
 
 class AtletaView:
     '''
@@ -33,7 +34,8 @@ class AtletaView:
                          "13":self.generar_graficos_atleta,
                          "14":self.listaActividadesInscritos,
                          "15":self.compararConOtros,
-                         "16": self
+                         "16":self.visualizarActividadesOtrosDeportistas,
+                         "17": self
                        }
         
     def displayMenu (self):
@@ -53,7 +55,8 @@ class AtletaView:
               13.- Generar gráficos
               14.- Ver actividades inscrito
               15.- Comparación con otros atletas
-              16.- Volver al menu principal
+              16.- Visualizar actividades de otros deportistas
+              17.- Volver al menu principal
               """)
  
     #Muestra la lista de opciones y permite la selección
@@ -63,7 +66,7 @@ class AtletaView:
             choice = input("Introducir opción: ")
             action = self.choices.get(choice)
             if action:
-                if choice=="16":
+                if choice=="17":
                     return
                 action()
             else:
@@ -499,4 +502,32 @@ class AtletaView:
             print(f"Número de actividades: {num_actividades}")
             print(f"Consumo calórico medio: {consumo_medio:.2f} kcal/h")
             print()
+    
+    def visualizarActividadesOtrosDeportistas(self):
+        correo_electronico = input("Introduzca su corrreo electrónico:")
+        while correo_electronico.lower() not in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("El correo no está registrado")
+            correo_electronico=input("Vuelva a introducir su correo electrónico:")
+        if self.atleta.obtenerTipoAtleta(correo_electronico) != 'Premium':
+            print("Esta funcionalidad está disponible solo para usuarios Premium.")
+            return
+        atletas_disponibles = [correo['correo_electronico'] for correo in self.atleta.getAtletas() if correo['correo_electronico'] != correo_electronico]
+        print("Atletas disponibles para comparar:")
+        for i, atleta in enumerate(atletas_disponibles, 1):
+            print(f"{i}. {atleta}")
+        correo_electronico_otro=input("Introduzca el correo electrónico del atleta a visualizar las actividades:")
+        while correo_electronico_otro.lower() not in [correo['correo_electronico'].lower() for correo in self.atleta.getAtletas()]:
+            print("El correo no existe.")
+            correo_electronico_otro = input("Vuelva a introducir el correo electrónico del atleta:")
+        # Si el atleta actual tiene permisos:
+        actividades_otro_deportista = self.atleta.obtenerActividadesDeportista(correo_electronico_otro)
+        if actividades_otro_deportista:
+            tabla = PrettyTable()
+            tabla.field_names = ["Nombre", "Fecha", "Duración (minutos)"]
+            for actividad in actividades_otro_deportista:
+                tabla.add_row([actividad['nombre_actividad'], actividad['fecha'], actividad['duracion']])
+            print(f"\nActividades de {correo_electronico_otro}:\n")
+            print(tabla)
+        else:
+            print(f"No hay actividades registradas para {correo_electronico_otro}.\n")
      
